@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Signup Form</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Background Video -->
+    <video autoplay loop muted playsinline class="bg-video">
+        <source src="video.mp4" type="video/mp4">
+    </video>
+
+    <div class="container">
+        <!-- Login Form -->
+        <div id="login-form">
+            <h1>LOGIN</h1>
+            <div class="input-box">
+                <i class="bx bxs-user"></i>
+                <input type="text" id="login-username" placeholder="Username" required>
+            </div>
+            <div class="input-box">
+                <i class="bx bxs-lock"></i>
+                <input type="password" id="login-password" placeholder="Password" required>
+            </div>
+            <button class="btn" type="button">Login</button>
+            <p class="toggle-btn">Don't have an account? Register</p>
+        </div>
+
+        <!-- Signup Form -->
+        <div id="register-form" class="hidden">
+            <h1>SIGN UP</h1>
+            <div class="input-box">
+                <i class="bx bxs-user"></i>
+                <input type="text" id="signup-username" placeholder="Username" required>
+            </div>
+            <div class="input-box">
+                <i class="bx bxs-envelope"></i>
+                <input type="email" id="signup-email" placeholder="Email" required>
+            </div>
+            <div class="input-box">
+                <i class="bx bxs-lock"></i>
+                <input type="password" id="signup-password" placeholder="Password" required>
+            </div>
+            <button class="btn" type="button">Register</button>
+            <p class="toggle-btn">Already have an account? Login</p>
+            <p class="social-text" style="margin-top: 10px;">Register with Social Platforms</p>
+            <div class="social-icons">
+                <i class="bx bxl-google"></i>
+                <i class="bx bxl-facebook"></i>
+                <i class="bx bxl-linkedin"></i>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js" defer></script>
+</body>
+</html>

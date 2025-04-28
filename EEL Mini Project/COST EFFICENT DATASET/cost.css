@@ -1,0 +1,419 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: url('9.jpg') no-repeat center center fixed;
+    background-size: cover;
+    padding: 20px;
+}
+
+/* Dashboard Container */
+.dashboard {
+    max-width: 900px;
+    margin: auto;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Stats Section */
+.stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.card {
+    background: linear-gradient(135deg, #FF9800, #FFC107);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 30%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Chart Container */
+.chart-container {
+    width: 100%;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+/* Delivery Data Section */
+.delivery-data {
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background: linear-gradient(135deg, #FF9800, #FFC107);
+    color: white;
+}
+
+/* Buttons */
+button {
+    background: #FF5722;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: #E64A19;
+    transform: scale(1.05);
+}
+
+.delete-btn {
+    background: #E74C3C !important;
+}
+
+.delete-btn:hover {
+    background: #C23B22 !important;
+}
+
+/* Input Fields */
+input {
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: calc(100% - 20px);
+}
+
+/* Search Bar */
+#search-bar {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Modal Popup */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+}
+
+/* Centered Modal Box */
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.analysis-modal-content {
+    max-width: 90%;
+    width: 700px;
+    max-height: 90vh;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.analysis-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.summary {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 15px;
+    border-radius: 8px;
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.summary p {
+    margin: 5px 0;
+}
+
+/* Chart Containers in Analysis Modal */
+#bar-chart-container, #line-chart-container {
+    width: 100%;
+    min-height: 250px;
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: auto;
+}
+
+/* Ensure images and canvases are responsive */
+#bar-chart-container img, #line-chart-container img,
+#bar-chart-container canvas, #line-chart-container canvas {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Close Button */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #555;
+    transition: all 0.3s ease;
+}
+
+.close:hover {
+    color: red;
+    transform: scale(1.2);
+}
+
+/* Spinner for loading */
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #FF5722;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .stats {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .analysis-modal-content {
+        width: 95%;
+        max-height: 85vh;
+        padding: 15px;
+    }
+
+    .summary {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    #bar-chart-container, #line-chart-container {
+        min-height: 200px;
+    }
+
+    .summary p {
+        font-size: 12px;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+/* Cost Insights Section */
+.cost-insights {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: white;
+    padding: 40px 20px;
+    margin-top: 50px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.insights-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.insights-header h2 {
+    color: #f39c12;
+    font-size: 1.8rem;
+}
+
+.insights-header p {
+    color: #ecf0f1;
+    font-size: 1.1rem;
+}
+
+/* Timeline Style */
+.cost-timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto 40px;
+}
+
+.cost-timeline::before {
+    content: '';
+    position: absolute;
+    width: 3px;
+    background: rgba(255,255,255,0.2);
+    top: 0;
+    bottom: 0;
+    left: 30px;
+}
+
+.timeline-item {
+    padding: 15px 0 15px 60px;
+    position: relative;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #3498db;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 0 0 5px rgba(52,152,219,0.2);
+}
+
+.timeline-content {
+    background: rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 8px;
+    backdrop-filter: blur(5px);
+}
+
+.timeline-content h3 {
+    color: #f39c12;
+    margin-top: 0;
+}
+
+.stats {
+    font-weight: bold;
+    color: #2ecc71;
+    margin: 5px 0 10px;
+}
+
+/* Comparison Table */
+.cost-comparison {
+    max-width: 800px;
+    margin: 0 auto 30px;
+    overflow-x: auto;
+}
+
+.cost-comparison h3 {
+    color: #f39c12;
+    text-align: center;
+}
+
+.cost-comparison table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.cost-comparison th, 
+.cost-comparison td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.cost-comparison th {
+    background: rgba(0,0,0,0.2);
+}
+
+.cost-comparison tr:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+.savings {
+    color: #2ecc71;
+    font-weight: bold;
+}
+
+/* Key Takeaway */
+.key-takeaway {
+    background: rgba(46,204,113,0.2);
+    border-left: 4px solid #2ecc71;
+    padding: 15px;
+    max-width: 800px;
+    margin: 20px auto 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.key-takeaway i {
+    font-size: 1.8rem;
+    color: #2ecc71;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cost-timeline::before {
+        left: 20px;
+    }
+    .timeline-item {
+        padding-left: 50px;
+    }
+    .timeline-marker {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+}

@@ -1,0 +1,591 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: url('5.jpg') no-repeat center center fixed;
+    background-size: cover;
+    padding: 20px;
+}
+
+/* Dashboard Container */
+.dashboard {
+    max-width: 900px;
+    margin: auto;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Stats Section */
+.stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.card {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 30%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Chart Container */
+.chart-container {
+    width: 100%;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+/* Chart Containers in Analysis Modal */
+#bar-chart-container, #line-chart-container {
+    width: 100%;
+    min-height: 300px; /* Ensure sufficient height for images */
+    margin: 10px 0;
+    display: flex;
+    justify-content: center; /* Center images horizontally */
+    align-items: center; /* Center images vertically */
+}
+
+/* Ensure images are responsive */
+#bar-chart-container img, #line-chart-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Orders Section */
+.orders {
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+}
+
+/* Buttons */
+button {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+/* Modal Popup */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100vw; /* Full viewport width */
+    height: 100vh; /* Full viewport height */
+    background: rgba(0, 0, 0, 0.6); /* Slightly darker overlay */
+    display: flex; /* Use flex to center content */
+    align-items: center;
+    justify-content: center;
+    overflow: auto; /* Enable scrolling for viewport overflow */
+}
+
+/* Centered Modal Box */
+.modal-content {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 350px; /* Smaller for add order modal */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.analysis-modal-content {
+    max-width: 700px; /* Reduced from 800px for better fit */
+    max-height: 85vh; /* Tighter constraint */
+    padding: 15px;
+    overflow-y: auto; /* Scroll if content overflows */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-sizing: border-box; /* Prevent padding issues */
+}
+
+.analysis-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.summary {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 10px;
+    border-radius: 6px;
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.summary p {
+    margin: 3px 0;
+}
+
+/* Chart Containers in Analysis Modal */
+#bar-chart-container, #line-chart-container {
+    width: 100%;
+    min-height: 200px; /* Reduced for better fit */
+    margin: 5px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Ensure images are responsive */
+#bar-chart-container img, #line-chart-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Close Button */
+.close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #333;
+    transition: all 0.2s ease;
+}
+
+.close:hover {
+    color: red;
+    transform: scale(1.1);
+}
+
+/* Responsive Design for Modal */
+@media (max-width: 600px) {
+    .analysis-modal-content {
+        max-width: 98%; /* Nearly full width on mobile */
+        max-height: 80vh; /* Smaller height */
+        padding: 10px;
+    }
+
+    .summary {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    #bar-chart-container, #line-chart-container {
+        min-height: 150px; /* Smaller charts on mobile */
+    }
+
+    .summary p {
+        font-size: 12px;
+    }
+}
+
+button:hover {
+    background: #218838;
+    transform: scale(1.05);
+}
+
+/* Delete Button */
+.delete-btn {
+    background: #dc3545 !important;
+}
+
+.delete-btn:hover {
+    background: #c82333 !important;
+}
+
+/* Input Fields */
+input {
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: calc(100% - 20px);
+}
+
+/* Search Bar */
+#search-bar {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Modal Popup */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+/* Centered Modal Box */
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.analysis-modal-content {
+    max-width: 800px;
+    padding: 30px;
+}
+
+.analysis-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.summary {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.summary p {
+    margin: 5px 0;
+}
+
+/* Close Button */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #555;
+    transition: all 0.3s ease;
+}
+
+.close:hover {
+    color: red;
+    transform: scale(1.2);
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .stats {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .analysis-modal-content {
+        max-width: 100%;
+        padding: 15px;
+    }
+}
+/* Performance Insights Section */
+.performance-insights {
+    background: white;
+    padding: 40px 20px;
+    margin-top: 50px;
+    border-radius: 10px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    border: 1px solid #e0e0e0;
+}
+
+.insights-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.insights-header h2 {
+    color: #2c3e50;
+    font-size: 1.8rem;
+}
+
+.insights-header p {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+}
+
+/* Metric Grid */
+.metric-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.metric-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    border-top: 4px solid #3498db;
+}
+
+.metric-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+.metric-card h3 {
+    color: #2c3e50;
+    margin: 0 0 10px;
+    font-size: 1.2rem;
+}
+
+.metric-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.trend {
+    font-size: 1rem;
+    font-weight: normal;
+    padding: 3px 8px;
+    border-radius: 12px;
+    margin-left: 8px;
+}
+
+.trend.up {
+    background: #e8f5e9;
+    color: #27ae60;
+}
+
+.trend.down {
+    background: #ffebee;
+    color: #e74c3c;
+}
+
+.trend.stable {
+    background: #e3f2fd;
+    color: #3498db;
+}
+
+.progress-bar {
+    height: 6px;
+    background: #ecf0f1;
+    border-radius: 3px;
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    border-radius: 3px;
+}
+
+.note {
+    font-size: 0.85rem;
+    color: #95a5a6;
+    margin-top: 5px;
+}
+
+/* Specifications */
+.specs-container {
+    margin-bottom: 40px;
+}
+
+.specs-container h3 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.spec-card {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    border-left: 4px solid #3498db;
+}
+
+.spec-card h4 {
+    color: #7f8c8d;
+    margin: 0 0 10px;
+    font-size: 1rem;
+}
+
+.spec-value {
+    margin: 15px 0;
+    line-height: 1;
+}
+
+.value {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.unit {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+    margin-left: 3px;
+}
+
+/* Maintenance Alerts */
+.maintenance-alerts h3 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.alert-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.alert-card {
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.alert-card i {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.alert-card h4 {
+    margin: 0 0 8px;
+    font-size: 1.1rem;
+}
+
+.alert-card p {
+    margin: 0 0 5px;
+    color: #2c3e50;
+}
+
+.alert-age {
+    font-size: 0.85rem;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-top: 8px;
+}
+
+.alert-card.minor {
+    background: #fff8e1;
+    border-left: 4px solid #ffc107;
+}
+
+.alert-card.minor i {
+    color: #ffc107;
+}
+
+.alert-card.minor .alert-age {
+    background: #ffc10720;
+    color: #ff9800;
+}
+
+.alert-card.critical {
+    background: #ffebee;
+    border-left: 4px solid #f44336;
+}
+
+.alert-card.critical i {
+    color: #f44336;
+}
+
+.alert-card.critical .alert-age {
+    background: #f4433620;
+    color: #f44336;
+}
+
+.alert-card.scheduled {
+    background: #e8f5e9;
+    border-left: 4px solid #4caf50;
+}
+
+.alert-card.scheduled i {
+    color: #4caf50;
+}
+
+.alert-card.scheduled .alert-age {
+    background: #4caf5020;
+    color: #4caf50;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .metric-grid, 
+    .specs-grid,
+    .alert-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .metric-card {
+        padding: 15px;
+    }
+}

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Drone Delivery Path Finder with Geocoding</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    #map {
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+    .controls {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.85);
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      z-index: 2;
+    }
+    input, button {
+      padding: 5px;
+      font-size: 14px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    button {
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <div class="controls">
+    <label>Start Destination:</label>
+    <input id="start-input" type="text" placeholder="e.g., London Eye" />
+    <label>End Destination:</label>
+    <input id="end-input" type="text" placeholder="e.g., Big Ben" />
+    <button onclick="findPath()">Find Path</button>
+    <button onclick="clearMap()">Clear</button>
+  </div>
+
+  <script>
+    let map = L.map("map").setView([51.505, -0.09], 13);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "© OpenStreetMap"
+    }).addTo(map);
+
+    let nodes = {}, graph = {}, markers = {}, polylines = [], pathLayer = null, droneMarker = null;
+    let maxBattery = 100, batteryPerKm = 2, path = [], animationStep = 0;
+
+    map.on("click", e => addNode(e.latlng, null));
+
+    function addNode(latlng, name) {
+      let nodeId = String.fromCharCode(65 + Object.keys(nodes).length);
+      nodes[nodeId] = { lat: latlng.lat, lng: latlng.lng, name: name || nodeId };
+      graph[nodeId] = {};
+      for (let otherId in nodes) {
+        if (otherId !== nodeId) {
+          let dist = haversineDistance(nodes[nodeId], nodes[otherId]);
+          graph[nodeId][otherId] = dist;
+          graph[otherId][nodeId] = dist;
+        }
+      }
+      let marker = L.circleMarker([latlng.lat, latlng.lng], {
+        radius: 5,
+        color: name ? "red" : "blue"
+      }).addTo(map).bindPopup(name || nodeId);
+      markers[nodeId] = marker;
+      updatePolylines();
+    }
+
+    function haversineDistance(a, b) {
+      const R = 6371;
+      let dLat = (b.lat - a.lat) * Math.PI / 180;
+      let dLon = (b.lng - a.lng) * Math.PI / 180;
+      let lat1 = a.lat * Math.PI / 180;
+      let lat2 = b.lat * Math.PI / 180;
+      let aH = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+               Math.cos(lat1) * Math.cos(lat2) *
+               Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      let c = 2 * Math.atan2(Math.sqrt(aH), Math.sqrt(1 - aH));
+      return R * c;
+    }
+
+    function updatePolylines() {
+      polylines.forEach(polyline => map.removeLayer(polyline));
+      polylines = [];
+      for (let src in graph) {
+        for (let dest in graph[src]) {
+          if (src < dest) {
+            let polyline = L.polyline(
+              [[nodes[src].lat, nodes[src].lng], [nodes[dest].lat, nodes[dest].lng]],
+              { color: "black" }
+            ).addTo(map).bindPopup(`Distance: ${graph[src][dest].toFixed(2)} km`);
+            polylines.push(polyline);
+          }
+        }
+      }
+    }
+
+    async function geocodePlace(place) {
+      const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(place)}&format=json&limit=1`;
+      const response = await fetch(url, { headers: { "User-Agent": "DroneDeliveryPathFinder/1.0" } });
+      const data = await response.json();
+      if (!data.length) throw new Error("Place not found: " + place);
+      return {
+        lat: parseFloat(data[0].lat),
+        lng: parseFloat(data[0].lon),
+        name: data[0].display_name
+      };
+    }
+
+    async function findPath() {
+      try {
+        let startInput = document.getElementById("start-input").value.trim();
+        let endInput = document.getElementById("end-input").value.trim();
+        if (!startInput || !endInput) throw new Error("Please enter start and end destinations.");
+
+        let startNodeId = null, endNodeId = null;
+
+        for (let id in nodes) {
+          if (nodes[id].name.toLowerCase().includes(startInput.toLowerCase())) startNodeId = id;
+          if (nodes[id].name.toLowerCase().includes(endInput.toLowerCase())) endNodeId = id;
+        }
+
+        if (!startNodeId) {
+          let start = await geocodePlace(startInput);
+          startNodeId = String.fromCharCode(65 + Object.keys(nodes).length);
+          addNode({ lat: start.lat, lng: start.lng }, start.name);
+        }
+        if (!endNodeId) {
+          let end = await geocodePlace(endInput);
+          endNodeId = String.fromCharCode(65 + Object.keys(nodes).length);
+          addNode({ lat: end.lat, lng: end.lng }, end.name);
+        }
+
+        [path, totalDistance, batteryUsed] = dijkstra(startNodeId, endNodeId);
+        if (!path) throw new Error("No feasible path found within battery constraints.");
+
+        if (pathLayer) map.removeLayer(pathLayer);
+        let latlngs = path.map(id => [nodes[id].lat, nodes[id].lng]);
+        pathLayer = L.polyline(latlngs, { color: "green", weight: 5 }).addTo(map);
+        map.fitBounds(L.latLngBounds(latlngs), { padding: [50, 50] });
+
+        animationStep = 0;
+        animateDrone();
+
+        let content = `
+          <strong>Route:</strong> ${path.join(" → ")}<br>
+          <strong>Total Distance:</strong> ${totalDistance.toFixed(2)} km<br>
+          <strong>Battery Required:</strong> ${batteryUsed.toFixed(2)}%
+        `;
+
+        let mid = nodes[path[Math.floor(path.length / 2)]];
+        L.popup({ maxWidth: 300 })
+          .setLatLng([mid.lat, mid.lng])
+          .setContent(content)
+          .openOn(map);
+
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    function dijkstra(start, end) {
+      let distances = {}, previous = {}, pq = [], batteryNeeded = {};
+      for (let node in graph) {
+        distances[node] = Infinity;
+        previous[node] = null;
+        batteryNeeded[node] = 0;
+      }
+      distances[start] = 0;
+      pq.push([0, start]);
+
+      while (pq.length) {
+        pq.sort((a, b) => a[0] - b[0]);
+        let [dist, current] = pq.shift();
+        if (current === end) break;
+
+        for (let neighbor in graph[current]) {
+          let d = graph[current][neighbor];
+          let batteryCost = d * batteryPerKm;
+          if (batteryNeeded[current] + batteryCost > maxBattery) continue;
+
+          let newDist = dist + d;
+          if (newDist < distances[neighbor]) {
+            distances[neighbor] = newDist;
+            batteryNeeded[neighbor] = batteryNeeded[current] + batteryCost;
+            previous[neighbor] = current;
+            pq.push([newDist, neighbor]);
+          }
+        }
+      }
+
+      if (distances[end] === Infinity) return [null, null, null];
+
+      let route = [], curr = end;
+      while (curr) {
+        route.push(curr);
+        curr = previous[curr];
+      }
+      route.reverse();
+      return [route, distances[end], batteryNeeded[end]];
+    }
+
+    function animateDrone() {
+      if (path.length < 2) return;
+      if (animationStep >= 100 * (path.length - 1)) {
+        if (droneMarker) map.removeLayer(droneMarker);
+        return;
+      }
+      let seg = Math.floor(animationStep / 100);
+      let t = (animationStep % 100) / 100;
+      let a = nodes[path[seg]], b = nodes[path[seg + 1]];
+      let lat = a.lat + (b.lat - a.lat) * t;
+      let lng = a.lng + (b.lng - a.lng) * t;
+      if (droneMarker) map.removeLayer(droneMarker);
+      droneMarker = L.circleMarker([lat, lng], { radius: 5, color: "red" }).addTo(map);
+      animationStep += 1;
+      setTimeout(animateDrone, 20);
+    }
+
+    function clearMap() {
+      nodes = {};
+      graph = {};
+      path = [];
+      animationStep = 0;
+      for (let id in markers) map.removeLayer(markers[id]);
+      markers = {};
+      polylines.forEach(p => map.removeLayer(p));
+      polylines = [];
+      if (pathLayer) map.removeLayer(pathLayer);
+      if (droneMarker) map.removeLayer(droneMarker);
+      map.setView([51.505, -0.09], 13);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="stats">
+            <div class="card">
+                <h3>Orders</h3>
+                <p id="orders-count">0</p>
+            </div>
+            <div class="card">
+                <h3>Deliveries</h3>
+                <p id="deliveries-count">0</p>
+            </div>
+            <div class="card">
+                <h3>Revenue ($K)</h3>
+                <p id="revenue-count">0</p>
+            </div>
+        </div>
+        <div class="chart-container">
+            <canvas id="chart"></canvas>
+        </div>
+        <div class="orders">
+            <h2>Recent Orders</h2>
+            <input type="text" id="search-bar" placeholder="Search by Drone ID">
+            <input type="file" id="excel-file" accept=".xlsx, .xls, .csv">
+            <button onclick="uploadExcel()">Upload Excel</button>
+            <button id="export-btn" onclick="exportToExcel()">Export to Excel</button>
+            <button id="open-modal">Add Record</button>
+            <button id="delete-all">Delete All Records</button>
+            <button id="open-analysis">View Analysis</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>ID</th>
+                        <th>Drone ID</th>
+                        <th>Status</th>
+                        <th>Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-table"></tbody>
+            </table>
+        </div>
+    </div>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close-modal">×</span>
+            <h2>Add Order</h2>
+            <input type="date" id="date-input">
+            <input type="text" id="customer-input" placeholder="Enter Drone ID">
+            <input type="text" id="status-input" placeholder="Enter Order Status">
+            <input type="number" id="amount-input" placeholder="Enter Amount">
+            <button onclick="addOrder()">Submit</button>
+        </div>
+    </div>
+    <div id="analysis-modal" class="modal">
+        <div class="modal-content analysis-modal-content">
+            <span class="close" id="close-analysis-modal">×</span>
+            <h2>Data Analysis</h2>
+            <div class="analysis-container">
+                <div class="summary">
+                    <h3>Summary</h3>
+                    <p><strong>Total Orders:</strong> <span id="total-orders">0</span></p>
+                    <p><strong>Pending Orders:</strong> <span id="pending-orders">0</span></p>
+                    <p><strong>Delivered Orders:</strong> <span id="delivered-orders">0</span></p>
+                    <p><strong>Average Order Amount:</strong> $<span id="avg-amount">0</span></p>
+                </div>
+                <div class="chart-container" id="bar-chart-container"></div>
+                <div class="chart-container" id="line-chart-container"></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <!-- Drone Performance Insights Section -->
+<section class="performance-insights">
+    <div class="insights-header">
+        <h2><i class="fas fa-chart-line"></i> Key Drone Performance Metrics</h2>
+        <p>Real-time monitoring of critical operational parameters</p>
+    </div>
+
+    <!-- Metric Cards -->
+    <div class="metric-grid">
+        <div class="metric-card">
+            <div class="metric-icon" style="background: #e74c3c20;">
+                <i class="fas fa-tachometer-alt" style="color: #e74c3c;"></i>
+            </div>
+            <h3>Speed Efficiency</h3>
+            <div class="metric-value">82% <span class="trend up">↑5%</span></div>
+            <div class="metric-details">
+                <p>Optimal range: 35-45 km/h</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 82%; background: #e74c3c;"></div>
+                </div>
+                <p class="note">Affected by wind resistance and payload</p>
+            </div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-icon" style="background: #3498db20;">
+                <i class="fas fa-battery-three-quarters" style="color: #3498db;"></i>
+            </div>
+            <h3>Battery Health</h3>
+            <div class="metric-value">91% <span class="trend stable">→</span></div>
+            <div class="metric-details">
+                <p>Cycle count: 142/500</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 91%; background: #3498db;"></div>
+                </div>
+                <p class="note">Degrades 0.8% per 10 cycles</p>
+            </div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-icon" style="background: #2ecc7120;">
+                <i class="fas fa-check-circle" style="color: #2ecc71;"></i>
+            </div>
+            <h3>Success Rate</h3>
+            <div class="metric-value">97.3% <span class="trend up">↑1.2%</span></div>
+            <div class="metric-details">
+                <p>Last 30 days: 287/295</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 97.3%; background: #2ecc71;"></div>
+                </div>
+                <p class="note">Industry average: 94.5%</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Technical Specifications -->
+    <div class="specs-container">
+        <h3><i class="fas fa-cogs"></i> Performance Benchmarks</h3>
+        <div class="specs-grid">
+            <div class="spec-card">
+                <h4>Flight Duration</h4>
+                <div class="spec-value">
+                    <span class="value">38</span>
+                    <span class="unit">min</span>
+                </div>
+                <p>Max payload (5kg)</p>
+            </div>
+            <div class="spec-card">
+                <h4>Max Range</h4>
+                <div class="spec-value">
+                    <span class="value">24.7</span>
+                    <span class="unit">km</span>
+                </div>
+                <p>@ 40km/h speed</p>
+            </div>
+            <div class="spec-card">
+                <h4>Wind Tolerance</h4>
+                <div class="spec-value">
+                    <span class="value">19</span>
+                    <span class="unit">m/s</span>
+                </div>
+                <p>Stable operation</p>
+            </div>
+            <div class="spec-card">
+                <h4>Precision</h4>
+                <div class="spec-value">
+                    <span class="value">±0.3</span>
+                    <span class="unit">m</span>
+                </div>
+                <p>Landing accuracy</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Maintenance Alerts -->
+    <div class="maintenance-alerts">
+        <h3><i class="fas fa-tools"></i> Maintenance Indicators</h3>
+        <div class="alert-grid">
+            <div class="alert-card minor">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h4>Propeller Wear</h4>
+                <p>4 drones need inspection</p>
+                <span class="alert-age">2 days overdue</span>
+            </div>
+            <div class="alert-card critical">
+                <i class="fas fa-times-circle"></i>
+                <h4>Battery Fault</h4>
+                <p>1 unit requires replacement</p>
+                <span class="alert-age">Urgent</span>
+            </div>
+            <div class="alert-card scheduled">
+                <i class="fas fa-calendar-check"></i>
+                <h4>Routine Check</h4>
+                <p>12 drones due in 3 days</p>
+                <span class="alert-age">On schedule</span>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

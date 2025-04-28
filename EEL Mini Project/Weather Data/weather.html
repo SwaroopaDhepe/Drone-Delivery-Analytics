@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Data Dashboard</title>
+    <link rel="stylesheet" href="weather.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="stats">
+            <div class="card">
+                <h3>Total Records</h3>
+                <p id="records-count">0</p>
+            </div>
+            <div class="card">
+                <h3>Average Wind Speed (km/h)</h3>
+                <p id="wind-speed-avg">0</p>
+            </div>
+            <div class="card">
+                <h3>Total Rainfall (mm)</h3>
+                <p id="rainfall-total">0</p>
+            </div>
+        </div>
+        <div class="chart-container">
+            <canvas id="chart"></canvas>
+        </div>
+        <div class="weather-data">
+            <h2>Weather Data</h2>
+            <input type="text" id="search-bar" placeholder="Search by Date or Time">
+            <input type="file" id="excel-file" accept=".xlsx, .xls">
+            <button onclick="uploadExcel()">Upload Excel</button>
+            <button id="export-btn" onclick="exportToExcel()">Export to Excel</button>
+            <button id="open-modal">Add Record</button>
+            <button id="delete-all">Delete All Records</button>
+            <button id="open-analysis">Data Analysis</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Wind Speed (km/h)</th>
+                        <th>Rainfall (mm)</th>
+                        <th>Visibility (km)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="weather-table"></tbody>
+            </table>
+        </div>
+    </div>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close-modal">×</span>
+            <h2>Add Weather Record</h2>
+            <input type="date" id="date-input">
+            <input type="time" id="time-input">
+            <input type="number" id="wind-speed-input" placeholder="Wind Speed (km/h)" step="0.01" min="0">
+            <input type="number" id="rainfall-input" placeholder="Rainfall (mm)" step="0.01" min="0">
+            <input type="number" id="visibility-input" placeholder="Visibility (km)" step="0.01" min="0">
+            <button onclick="addRecord()">Submit</button>
+        </div>
+    </div>
+    <div id="analysis-modal" class="modal">
+        <div class="modal-content analysis-modal-content">
+            <span class="close" id="close-analysis-modal">×</span>
+            <h2>Weather Data Analysis</h2>
+            <div class="analysis-container">
+                <div class="summary">
+                    <h3>Summary</h3>
+                    <p><strong>Total Records:</strong> <span id="total-records">0</span></p>
+                    <p><strong>Average Wind Speed (km/h):</strong> <span id="avg-wind-speed">0</span></p>
+                    <p><strong>Total Rainfall (mm):</strong> <span id="total-rainfall">0</span></p>
+                    <p><strong>Average Visibility (km):</strong> <span id="avg-visibility">0</span></p>
+                </div>
+                <div class="chart-container" id="bar-chart-container"></div>
+                <div class="chart-container" id="line-chart-container"></div>
+            </div>
+        </div>
+    </div>
+    <script src="weather.js"></script>
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'932b4a0d0db0674f',t:'MTc0NTA1NDA0MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93315ded7dd7dd20',t:'MTc0NTExNzc2OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<!-- Weather Impact Section -->
+<section class="weather-impact">
+    <h2>How Weather Affects Drone Deliveries</h2>
+    
+    <div class="impact-grid">
+        <div class="impact-card">
+            <i class="fas fa-wind"></i>
+            <h3>Wind Speed</h3>
+            <p>Drones become unstable in winds over 20 mph (32 km/h). High winds may cause:</p>
+            <ul>
+                <li>Battery drain (up to 30% faster)</li>
+                <li>Delivery time delays</li>
+                <li>Package stability issues</li>
+            </ul>
+        </div>
+
+        <div class="impact-card">
+            <i class="fas fa-cloud-rain"></i>
+            <h3>Precipitation</h3>
+            <p>Most commercial drones cannot operate in:</p>
+            <ul>
+                <li>Heavy rain (> 10mm/hr)</li>
+                <li>Snow accumulation</li>
+                <li>Freezing conditions</li>
+            </ul>
+            <p class="footnote">Waterproof drones can handle light drizzle.</p>
+        </div>
+
+        <div class="impact-card">
+            <i class="fas fa-sun"></i>
+            <h3>Visibility</h3>
+            <p>Minimum requirements for safe operations:</p>
+            <ul>
+                <li>Daytime: 1km visibility</li>
+                <li>Nighttime: 3km visibility</li>
+            </ul>
+            <p class="footnote">Fog reduces sensor effectiveness by 40-60%.</p>
+        </div>
+
+        <div class="impact-card">
+            <i class="fas fa-temperature-high"></i>
+            <h3>Temperature</h3>
+            <p>Optimal range: 0°C to 40°C (32°F to 104°F)</p>
+            <ul>
+                <li>Cold: Battery efficiency drops below 0°C</li>
+                <li>Heat: Electronics may overheat above 40°C</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="safety-protocols">
+        <h3>Our Safety Protocols</h3>
+        <p>When adverse weather is detected:</p>
+        <ol>
+            <li>Automatic flight path recalculation</li>
+            <li>Priority landing zones activated</li>
+            <li>Real-time alerts to operators</li>
+            <li>Delivery rescheduling system</li>
+        </ol>
+    </div>
+</section>
+</body>
+</html>

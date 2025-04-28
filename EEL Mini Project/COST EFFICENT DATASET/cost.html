@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Data Dashboard</title>
+    <link rel="stylesheet" href="cost.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="stats">
+            <div class="card">
+                <h3>Total Deliveries</h3>
+                <p id="deliveries-count">0</p>
+            </div>
+            <div class="card">
+                <h3>Average Cost/Delivery</h3>
+                <p id="cost-avg">0</p>
+            </div>
+            <div class="card">
+                <h3>Total Fuel Consumption</h3>
+                <p id="fuel-total">0</p>
+            </div>
+        </div>
+        <div class="chart-container">
+            <canvas id="chart"></canvas>
+        </div>
+        <div class="delivery-data">
+            <h2>Delivery Data</h2>
+            <input type="text" id="search-bar" placeholder="Search by Time Taken (mins)">
+            <input type="file" id="excel-file" accept=".xlsx, .xls">
+            <button onclick="uploadExcel()">Upload Excel</button>
+            <button id="export-btn" onclick="exportToExcel()">Export to Excel</button>
+            <button id="open-modal">Add Delivery</button>
+            <button id="delete-all">Delete All Records</button>
+            <button id="open-analysis">View Analysis</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time Taken (mins)</th>
+                        <th>Cost per Delivery ($)</th>
+                        <th>Fuel Consumption (L)</th>
+                        <th>Electricity Consumption (kWh)</th>
+                        <th>Maintenance Cost ($)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="delivery-table"></tbody>
+            </table>
+        </div>
+    </div>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close-modal">×</span>
+            <h2>Add Delivery Record</h2>
+            <input type="number" id="time-input" placeholder="Time Taken (mins)" min="0">
+            <input type="number" id="cost-input" placeholder="Cost per Delivery ($)" min="0">
+            <input type="number" id="fuel-input" placeholder="Fuel Consumption (L)" min="0">
+            <input type="number" id="electricity-input" placeholder="Electricity Consumption (kWh)" min="0">
+            <input type="number" id="maintenance-input" placeholder="Maintenance Cost ($)" min="0">
+            <button onclick="addRecord()">Submit</button>
+        </div>
+    </div>
+    <div id="analysis-modal" class="modal">
+        <div class="modal-content analysis-modal-content">
+            <span class="close" id="close-analysis-modal">×</span>
+            <h2>Data Analysis</h2>
+            <div class="analysis-container">
+                <div class="summary">
+                    <h3>Summary</h3>
+                    <p><strong>Total Deliveries:</strong> <span id="total-deliveries">0</span></p>
+                    <p><strong>Average Cost/Delivery:</strong> $<span id="avg-cost">0</span></p>
+                    <p><strong>Total Fuel Consumption:</strong> <span id="total-fuel">0</span> L</p>
+                    <p><strong>Total Electricity Consumption:</strong> <span id="total-electricity">0</span> kWh</p>
+                    <p><strong>Total Maintenance Cost:</strong> $<span id="total-maintenance">0</span></p>
+                </div>
+                <div class="chart-container" id="bar-chart-container"></div>
+                <div class="chart-container" id="line-chart-container"></div>
+            </div>
+        </div>
+    </div>
+    <script src="cost.js"></script>
+<!-- Cost Efficiency Insights Section -->
+<section class="cost-insights">
+    <div class="insights-header">
+        <h2><i class="fas fa-coins"></i> How Cost Efficiency Improves Drone Deliveries</h2>
+        <p>Optimizing these factors reduces operational costs by up to 40%</p>
+    </div>
+
+    <!-- Timeline Infographic -->
+    <div class="cost-timeline">
+        <div class="timeline-item">
+            <div class="timeline-marker"><i class="fas fa-route"></i></div>
+            <div class="timeline-content">
+                <h3>Route Optimization</h3>
+                <p class="stats">Saves 15-25% fuel costs</p>
+                <ul>
+                    <li>AI calculates shortest paths avoiding no-fly zones</li>
+                    <li>Adapts to real-time air traffic</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-marker"><i class="fas fa-battery-three-quarters"></i></div>
+            <div class="timeline-content">
+                <h3>Battery Management</h3>
+                <p class="stats">Extends battery life by 30%</p>
+                <ul>
+                    <li>Smart charging stations along routes</li>
+                    <li>Load-balanced battery swaps</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-marker"><i class="fas fa-weight-hanging"></i></div>
+            <div class="timeline-content">
+                <h3>Payload Optimization</h3>
+                <p class="stats">Reduces wear-and-tear costs by 18%</p>
+                <ul>
+                    <li>Dynamic weight distribution algorithms</li>
+                    <li>Multi-package delivery routing</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cost Comparison Table -->
+    <div class="cost-comparison">
+        <h3><i class="fas fa-percentage"></i> Cost Reduction Benchmarks</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Factor</th>
+                    <th>Traditional</th>
+                    <th>Optimized</th>
+                    <th>Savings</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Fuel/Energy</td>
+                    <td>$0.28/mile</td>
+                    <td>$0.19/mile</td>
+                    <td class="savings">32%</td>
+                </tr>
+                <tr>
+                    <td>Maintenance</td>
+                    <td>$1.20/delivery</td>
+                    <td>$0.85/delivery</td>
+                    <td class="savings">29%</td>
+                </tr>
+                <tr>
+                    <td>Labor</td>
+                    <td>$3.50/delivery</td>
+                    <td>$2.10/delivery</td>
+                    <td class="savings">40%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="key-takeaway">
+        <i class="fas fa-lightbulb"></i>
+        <p>Our algorithms process 50+ cost variables in real-time to maintain the industry's lowest delivery costs.</p>
+    </div>
+</section>    
+</body>
+</html>

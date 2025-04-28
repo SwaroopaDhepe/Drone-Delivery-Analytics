@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* Background Video Styling */
+.bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1; /* Keeps it behind all content */
+}
+
+.container {
+    position: relative;
+    width: 400px;
+    background: rgba(0, 0, 0, 0.285); /* Semi-transparent white */
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgb(0, 0, 0);
+    text-align: center;
+}
+
+/* Heading Styling */
+.container h1 {
+    font-size: 26px;
+    color: rgb(255, 255, 255);
+    margin-bottom: 20px;
+}
+
+/* Input Field Styling */
+.input-box {
+    position: relative;
+    margin: 10px 0;
+}
+
+.input-box input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    font-size: 16px;
+    color: white;
+    padding-left: 40px;
+    outline: none;
+}
+
+.input-box input::placeholder {
+    color: rgb(255, 255, 255);
+}
+
+.input-box i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: rgb(255, 255, 255);
+}
+
+/* Button Styling */
+.btn {
+    width: 100%;
+    padding: 12px;
+    background: #4a90e2;
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    background: #357ABD;
+}
+
+/* Toggle Button Styling */
+.toggle-btn {
+    font-size: 14px;
+    margin-top: 10px;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+}
+
+.toggle-btn:hover {
+    text-decoration: underline;
+}
+
+/* Social Media Icons */
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.social-icons i {
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.social-icons i:hover {
+    color: #4a90e2;
+}
+
+.social-text {
+    color: white;
+    font-weight: bold; }
+
+.hidden {
+    display: none;
+}
