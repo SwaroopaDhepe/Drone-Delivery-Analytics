@@ -7,25 +7,17 @@ Traditional delivery methods are increasingly inefficient due to traffic congest
 
 Methodology
 Collected data from case studies, simulations, and industry reports.
-
 Analyzed delivery time, operational costs, and environmental metrics.
-
 Studied emerging technologies like AI-based route optimization and drone swarm coordination.
 
 Results
 Delivery time reduced by 40\u201360% compared to traditional methods.
-
 Operational cost savings of up to 30%.
-
 Carbon emissions reduced by approximately 25%.
-
 Future scalability enhanced through AI-driven logistics and 5G communication technologies.
 
 Technologies Used
 Python (Data Analysis, Visualization)
-
-MATLAB (Simulation Modeling)
-
 Statistical Tools (Performance Evaluation)
 
 Future Scope
